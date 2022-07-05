@@ -1,0 +1,58 @@
+:root {
+  --bg-dark: #121213;
+  --bg-stat-dark: rgba(0, 0, 0, 0.6);
+  --bg-tile-dark: rgba(255, 255, 255, 0.2);
+  --border-dark: rgba(255, 255, 255, 0.5);
+  --border-tile-dark: rgba(255, 255, 255, 0.3);
+  --word-border-dark: rgba(255, 255, 255, 0.5);
+  --text-dark: white;
+  --key-dark: gray;
+  --bg-correct-dark: rgb(1, 175, 77);
+  --bg-present-dark: #b59f3b;
+
+  --bg-light: white;
+  --bg-stat-light: rgba(255, 255, 255, 0.5);
+  --bg-tile-light: rgba(0, 0, 0, 0.5);
+  --border-light: rgba(0, 0, 0, 0.2);
+  --border-tile-light: rgba(0, 0, 0, 0.2);
+  --word-border-light: rgba(0, 0, 0, 0.5);
+  --text-light: black;
+  --key-light: lightgray;
+  --bg-correct-light: rgb(1, 175, 77);
+  --bg-present-light: #b59f3b;
+
+  /* for contrast */
+  --bg-correct-contrast: orangered;
+  --bg-present-contrast: rgb(71, 164, 196);
+}
+
+:root.dark {
+  --bg: var(--bg-dark);
+  --bg-stat: var(--bg-stat-dark);
+  --bg-tile: var(--bg-tile-dark);
+  --border-tile: var(--border-tile-dark);
+  --border: var(--border-dark);
+  --word-border: var(--word-border-dark);
+  --text: var(--text-dark);
+  --key: var(--key-dark);
+  --bg-correct: var(--bg-correct-dark);
+  --bg-present: var(--bg-present-dark);
+}
+
+:root.light {
+  --bg: var(--bg-light);
+  --bg-stat: var(--bg-stat-light);
+  --bg-tile: var(--bg-tile-light);
+  --border: var(--border-light);
+  --border-tile: var(--border-tile-light);
+  --word-border: var(--word-border-light);
+  --text: var(--text-light);
+  --key: var(--key-light);
+  --bg-correct: var(--bg-correct-light);
+  --bg-present: var(--bg-present-light);
+}
+
+:root.contrast {
+  --bg-correct: var(--bg-correct-contrast);
+  --bg-present: var(--bg-present-contrast);
+}

@@ -1,0 +1,839 @@
+@font-face {
+  font-family: Franklin;
+  src: url(/src/fonts/franklin-normal-500.woff2);
+}
+
+@font-face {
+  font-family: Franklin-bold;
+  src: url(/src/fonts/franklin-normal-700.woff2);
+}
+
+@font-face {
+  font-family: Karnak;
+  src: url(/src/fonts/karnakcondensed-normal-700.woff2);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Franklin;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+}
+
+#root {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+header {
+  padding: 0.3rem 1rem;
+  display: flex;
+  height: 50px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  z-index: 1;
+}
+
+header h1 {
+  font-family: Karnak;
+  font-size: 2.3rem;
+}
+
+header svg {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+header svg:last-child {
+  margin-right: 0;
+}
+
+header .option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 5px;
+  padding: 1rem;
+  z-index: 1;
+}
+
+.row {
+  display: flex;
+  width: 330px;
+  gap: 5px;
+}
+
+.tile {
+  height: 4rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--border-tile);
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 2rem;
+  font-family: Franklin-bold;
+  color: var(--text);
+  user-select: none;
+}
+
+.keyboard {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.key-row {
+  width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.key-row.middle {
+  width: 450px;
+}
+
+.keyboard button {
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  flex: 1;
+  height: 60px;
+  background: var(--key);
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  transition: 0.3s ease-in;
+  user-select: none;
+}
+
+.keyboard svg {
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+}
+
+.keyboard button.wide {
+  flex: 2;
+}
+
+/* working with javascript */
+.row.shake {
+  animation: shake 0.3s ease-in;
+}
+
+.row.flip div:nth-child(1) {
+  animation: flip 0.6s ease-in-out;
+}
+
+.row.flip div:nth-child(2) {
+  animation: flip 0.6s 0.2s ease-in-out;
+}
+
+.row.flip div:nth-child(3) {
+  animation: flip 0.6s 0.4s ease-in-out;
+}
+
+.row.flip div:nth-child(4) {
+  animation: flip 0.6s 0.6s ease-in-out;
+}
+
+.row.flip div:nth-child(5) {
+  animation: flip 0.6s 0.8s ease-in-out;
+}
+
+/* for correct answer */
+.row.answer div:nth-child(1) {
+  animation: jump 0.6s ease-in-out;
+}
+
+.row.answer div:nth-child(2) {
+  animation: jump 0.6s 0.1s ease-in-out;
+}
+
+.row.answer div:nth-child(3) {
+  animation: jump 0.6s 0.2s ease-in-out;
+}
+
+.row.answer div:nth-child(4) {
+  animation: jump 0.6s 0.3s ease-in-out;
+}
+
+.row.answer div:nth-child(5) {
+  animation: jump 0.6s 0.4s ease-in-out;
+}
+
+.word {
+  border: 2px solid var(--word-border) !important;
+  animation: pop 0.2s forwards;
+}
+
+.present {
+  background: var(--bg-present) !important;
+  border-color: var(--bg-present) !important;
+  color: white;
+}
+
+.correct {
+  background: var(--bg-correct) !important;
+  border-color: var(--bg-correct) !important;
+  color: white;
+}
+
+.absent {
+  background: var(--bg-tile) !important;
+  border-color: var(--bg-tile) !important;
+  color: white;
+}
+
+/* For Options */
+section.options {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  padding: 1rem;
+  width: 400px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  transition: 0.2s ease-in;
+  transform: translateX(-200px);
+  opacity: 0;
+  z-index: -1;
+}
+
+section.options.open {
+  opacity: 1;
+  z-index: 2;
+  transform: translateX(0);
+}
+
+.options .title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.options .title h1 {
+  font-weight: bolder;
+  letter-spacing: 3px;
+}
+
+.options .title svg {
+  font-size: 1.7rem;
+  cursor: pointer;
+  color: black;
+}
+
+.options h3 {
+  font-size: 0.9rem;
+  font-family: Franklin-bold;
+  margin: 1rem 0;
+  text-transform: uppercase;
+}
+
+.list {
+  border-bottom: 2px solid var(--border);
+  padding: 0.6rem 0;
+}
+
+.list article {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.list article:hover {
+  background: var(--key);
+}
+
+.list article img {
+  width: 25px;
+  height: 25px;
+  padding: 1px;
+}
+
+.list article h4 {
+  margin-left: 1rem;
+  font-size: 1rem;
+  font-weight: 300;
+  text-transform: capitalize;
+}
+
+.list article h4.shift {
+  margin-left: 2.5rem;
+}
+
+.options h4 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  padding-top: 0.5rem;
+}
+
+/* For Settings */
+section.settings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease-in;
+  transform: translateY(300px);
+  opacity: 0;
+  z-index: -1;
+}
+
+section.settings.open {
+  transform: translateY(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+.settings .container {
+  width: 600px;
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+}
+
+.container .header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container .header h1 {
+  text-transform: uppercase;
+  font-family: Franklin-bold;
+  font-size: 1.1rem;
+}
+
+.container .header svg {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.settings .container article {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.container article h2 {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.container article p {
+  font-size: 0.9rem;
+  color: gray;
+}
+
+.container article a {
+  color: gray;
+}
+
+.container article .btn {
+  width: 32px;
+  height: 20px;
+  background: gray;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 2px;
+  cursor: pointer;
+  transition: 0.3s ease-in;
+}
+
+.container article .btn div {
+  background: white;
+  width: 55%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translateX(0%);
+  transition: 0.2s ease-in;
+}
+
+.container article .btn.open {
+  background: var(--bg-correct);
+}
+
+.container article .btn.open div {
+  transform: translateX(80%);
+}
+
+.container article .btn.closed {
+  background: lightgray;
+}
+
+.container footer {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+  padding-right: 2rem;
+  display: flex;
+  justify-content: space-between;
+  color: gray;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+/* For Statistics */
+section.statistics {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--bg-stat);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  opacity: 0;
+  z-index: -1;
+  transform: translateY(200px);
+  transition: 0.3s ease-in;
+}
+
+section.statistics.open {
+  opacity: 1;
+  z-index: 2;
+  transform: translateY(0);
+}
+
+.statistics .container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.statistics .container h1.bold {
+  font-size: 1rem;
+  margin-top: 2rem;
+  text-align: center;
+  font-family: Franklin-bold;
+  text-transform: uppercase;
+}
+
+.statistics .stats {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.statistics .stats div {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.statistics .stats div h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: Franklin;
+}
+
+.statistics .stats div h5 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.statistics .dist div.articles {
+  padding: 0.5rem;
+  width: 400px;
+}
+
+.statistics .dist.empty div::before {
+  content: "No Data";
+  display: flex;
+  justify-content: center;
+}
+
+.statistics .dist.empty article {
+  display: none;
+}
+
+.statistics .dist.empty .next {
+  display: none;
+}
+
+.statistics .dist article {
+  width: 100%;
+  padding-bottom: 5px;
+  display: flex;
+}
+
+.statistics .dist article .no {
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  background: gray;
+  color: white;
+  text-align: center;
+  font-family: Franklin-bold;
+  margin-left: 10px;
+}
+
+.statistics .dist article .no.correct {
+  width: 100%;
+  background: var(--bg-correct);
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 10px;
+}
+
+.statistics .dist .next {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.statistics .dist .next .wordle {
+  text-transform: uppercase;
+  text-align: center;
+  border-right: 2px solid var(--text);
+  padding-right: 2rem;
+}
+
+.statistics .dist .next .wordle h2 {
+  font-family: sans-serif;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.statistics .dist .next .wordle h1 {
+  font-size: 2.5rem;
+  font-family: sans-serif;
+  font-weight: 500;
+}
+
+.statistics .dist .next .share {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statistics .dist .next .share-btn {
+  width: 180px;
+  padding: 0.5rem 0;
+  background: var(--bg-correct);
+  color: white;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.statistics .play {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.statistics .play h4 {
+  font-weight: 500;
+  padding-right: 1.5rem;
+}
+
+.statistics .play h3 {
+  font-size: 1rem;
+  font-family: Franklin-bold;
+}
+
+.statistics .play:hover h3 {
+  text-decoration: underline;
+}
+
+.statistics svg.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* For Tutorial */
+section.tutorial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  transition: 0.3s ease-in;
+  transform: translateY(300px);
+  opacity: 0;
+  z-index: -1;
+}
+
+section.tutorial.open {
+  transform: translateY(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+.tutorial .container {
+  width: 600px;
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+}
+
+.tutorial .container .header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tutorial .container .header h1 {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  font-family: Franklin-bold;
+}
+
+.tutorial .container .header svg {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.tutorial .container p {
+  font-size: 1rem;
+  margin: 1rem 0;
+  padding-right: 1rem;
+}
+
+.tutorial .container p span {
+  text-transform: uppercase;
+  font-family: Franklin-bold;
+  font-weight: 600;
+}
+
+.tutorial .container h5 {
+  font-size: 1rem;
+  font-family: Franklin-bold;
+  padding-bottom: 1rem;
+}
+
+.tutorial .container h5.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.tutorial .container .tiles {
+  width: 45px;
+  height: 40px;
+  border: 2px solid gray;
+  font-size: 1.5rem;
+  font-family: Franklin-bold;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tutorial .container .exa.open .one div:nth-child(1) {
+  background: var(--bg-correct);
+  color: white;
+  transform: rotateX(90deg);
+  animation: flip-run 0.3s 0.5s ease-in-out forwards;
+}
+
+.tutorial .container .exa.open .two div:nth-child(2) {
+  background: var(--bg-present);
+  color: white;
+  transform: rotateX(90deg);
+  animation: flip-run 0.3s 0.5s ease-in-out forwards;
+}
+
+.tutorial .container .exa.open .three div:nth-child(4) {
+  background: var(--bg-tile);
+  color: white;
+  transform: rotateX(90deg);
+  animation: flip-run 0.3s 0.5s ease-in-out forwards;
+}
+
+/* For Notification */
+.notif {
+  position: absolute;
+  top: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  max-width: 500px;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: 0.3s;
+  opacity: 0;
+  z-index: -1;
+  transition: 0.3s ease-in;
+}
+
+.notif.open {
+  opacity: 1;
+  z-index: 1;
+}
+
+.notif h1 {
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 410px) {
+  section.options {
+    width: 100%;
+  }
+  .row {
+    display: flex;
+    width: 95%;
+  }
+}
+
+@media (max-width: 560px) {
+  .key-row {
+    width: 95%;
+  }
+  .key-row.middle {
+    width: 88%;
+  }
+  .statistics .container {
+    width: 90%;
+  }
+}
+
+@keyframes pop {
+  0% {
+    scale: 0.8;
+    opacity: 0;
+  }
+  50% {
+    scale: 1.4;
+    opacity: 1;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes flip-run {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(-20px);
+  }
+  30% {
+    transform: translateY(20px);
+  }
+  70% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(5px);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(-5px);
+  }
+}

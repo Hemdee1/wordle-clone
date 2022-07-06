@@ -125,8 +125,9 @@ main {
 }
 
 .keyboard button {
-  font-size: 1rem;
-  font-weight: 400;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
   flex: 1;
   height: 55px;
@@ -498,6 +499,10 @@ section.statistics.open {
 .statistics .dist div.articles {
   padding: 0.5rem;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .statistics .dist.empty div::before {
@@ -746,6 +751,9 @@ section.tutorial.open {
 }
 
 @media (max-width: 410px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
   section.options {
     width: 100%;
   }
@@ -756,6 +764,29 @@ section.tutorial.open {
 }
 
 @media (max-width: 560px) {
+  .statistics .dist div.articles {
+    width: 200px;
+  }
+  .statistics .stats {
+    gap: 0.5rem;
+  }
+  .statistics .dist article {
+    padding-bottom: 5px;
+    display: flex;
+  }
+  .statistics .dist .next .wordle {
+    padding-right: 1rem;
+  }
+  .statistics .dist .next .wordle h1 {
+    font-size: 2rem;
+  }
+  .statistics .dist .next .share-btn {
+    width: 100px;
+    padding: 1rem 0;
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+
   .key-row {
     width: 95%;
   }

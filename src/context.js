@@ -114,6 +114,7 @@ const AppProvider = ({ children }) => {
   // VALIDATE TILES AND KEYS VALUES
   const validateValue = useCallback(
     (state) => {
+      console.log("validating");
       //  Validating for tiles
       const value = values[state];
       const word = values[state].join("");
@@ -213,7 +214,7 @@ const AppProvider = ({ children }) => {
 
         setTimeout(() => {
           setOpenStat(true);
-        }, 700);
+        }, 1500);
       }
     },
     [keyCont, solution, tileCont, values, showNotif]
@@ -330,7 +331,12 @@ const AppProvider = ({ children }) => {
         }
       }
     }
-  }, [tileCont, validateValue]);
+    /* eslint-disable */
+  }, [tileCont]);
+
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
 
   return (
     <AppContext.Provider

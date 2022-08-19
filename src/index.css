@@ -93,7 +93,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--border-tile);
+  border: 2px solid var(--border-tile);
   text-transform: uppercase;
   font-weight: 500;
   font-size: 2rem;
@@ -125,7 +125,7 @@ main {
 }
 
 .keyboard button {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -197,7 +197,7 @@ main {
 }
 
 .word {
-  border: 1px solid var(--word-border) !important;
+  border: 2px solid var(--word-border) !important;
   animation: pop 0.2s forwards;
 }
 

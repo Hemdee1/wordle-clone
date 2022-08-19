@@ -51,15 +51,33 @@ const Settings = () => {
         </article>
         <article>
           <h2>Feedback</h2>
-          <a href="/">Email</a>
+          <a
+            href="mailto:advancepro5110@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Email
+          </a>
         </article>
         <article>
           <h2>Community</h2>
-          <a href="/">Twitter</a>
+          <a
+            href="https://twitter.com/SanusiMuhyideen"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Twitter
+          </a>
         </article>
         <article>
           <h2>Questions?</h2>
-          <a href="/">FAQ</a>
+          <a
+            href="https://help.nytimes.com/hc/en-us/articles/360029050872-Word-Games-and-Logic-Puzzles#h_01FVGCB2Z00ZQMDMCYWBPWJNXB"
+            target="_blank"
+            rel="noreferrer"
+          >
+            FAQ
+          </a>
         </article>
 
         <footer>

@@ -2,6 +2,7 @@ import wordExists from "word-exists";
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { rows } from "./data";
 import { fiveLetterWords } from "./data";
+import validator from "validator";
 const { row1, row2, row3 } = rows;
 
 const AppContext = React.createContext();
@@ -28,7 +29,7 @@ const AppProvider = ({ children }) => {
   const [solution] = useState(preValues.solution);
   const [values, setValues] = useState(preValues.values);
   const [state, setState] = useState(preValues.state);
-  const [notif, setNotif] = useState("hello");
+  const [notif, setNotif] = useState("");
   const [tileCont, setTileCont] = useState();
   const [keyCont, setKeyCont] = useState();
 
@@ -103,7 +104,8 @@ const AppProvider = ({ children }) => {
       ...getLs(),
       state: 0,
       solution:
-        fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)],
+        // fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)],
+        "sweet",
       values: [[], [], [], [], [], []],
     };
 
@@ -114,7 +116,6 @@ const AppProvider = ({ children }) => {
   // VALIDATE TILES AND KEYS VALUES
   const validateValue = useCallback(
     (state) => {
-      console.log("validating");
       //  Validating for tiles
       const value = values[state];
       const word = values[state].join("");
@@ -134,11 +135,65 @@ const AppProvider = ({ children }) => {
         if (value[i] === solution[i]) {
           tileRow[i]?.classList.add("correct");
         } else if (solution.includes(value[i])) {
+          // check if the letter hasn't appear already
+          validateLetter(i);
+
           tileRow[i]?.classList.add("present");
         } else if (!solution.includes(value[i])) {
           tileRow[i]?.classList.add("absent");
         }
       };
+
+      // from line 140
+      let checkFirst = true;
+      function validateLetter(i) {
+        // check if the letter appear twice and also in the solution twice
+        if (
+          validator.contains(solution, value[i], {
+            minOccurrences: 2,
+          }) &&
+          value[i] !== solution[i]
+        ) {
+          tileRow[i]?.classList.add("present");
+          return;
+        }
+
+        // check if the letter appear twice but in the solution once
+        if (
+          validator.contains(value.join(""), value[i], {
+            minOccurrences: 2,
+          }) &&
+          value[i] !== solution[i]
+        ) {
+          // check if the answer come before the solution
+          if (solution.indexOf(value[i]) > value.indexOf(value[i])) {
+            tileRow[i]?.classList.add("absent");
+          }
+          if (!checkFirst) {
+            tileRow[i]?.classList.add("absent");
+          }
+          tileRow[i]?.classList.add("present");
+          checkFirst = false;
+
+          return;
+        }
+
+        // check if the letter appear twice but only appear once in the solution and not at the exact position
+        // if (
+        //   validator.contains(value.join(""), value[i], {
+        //     minOccurrences: 2,
+        //   }) &&
+        //   value[i] !== solution[i] &&
+        //   solution.includes(value[i])
+        // ) {
+        //   if (!checkFirst) {
+        //     tileRow[i]?.classList.add("absent");
+        //   }
+        //   tileRow[i]?.classList.add("present");
+        //   checkFirst = false;
+        //   return;
+        // }
+      }
 
       // adding delay for the animation
       for (let i = 0; i < 5; i++) {
@@ -334,9 +389,9 @@ const AppProvider = ({ children }) => {
     /* eslint-disable */
   }, [tileCont]);
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
+  // useEffect(() => {
+  //   console.log(values);
+  // }, [values]);
 
   return (
     <AppContext.Provider

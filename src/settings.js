@@ -82,7 +82,7 @@ const Settings = () => {
 
         <footer>
           <span>&copy; 2022 The new york times company</span>
-          <span>#363</span>
+          <span>Infinity</span>
         </footer>
       </div>
     </section>

@@ -465,6 +465,7 @@ section.statistics.open {
 .statistics .container h1.bold {
   font-size: 1rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
   font-family: Franklin-bold;
   text-transform: uppercase;
@@ -764,6 +765,10 @@ section.tutorial.open {
 }
 
 @media (max-width: 560px) {
+  .statistics .stats div h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
   .statistics .dist div.articles {
     width: 200px;
   }

@@ -8,27 +8,62 @@ const { row1, row2, row3 } = rows;
 const AppContext = React.createContext();
 
 // GETTING THE WORDLE FROM LOCAL STORAGE
-const preValues = localStorage.getItem("wordle")
-  ? JSON.parse(localStorage.getItem("wordle"))
-  : {
+
+if (!localStorage.getItem("wordle")) {
+  localStorage.setItem(
+    "wordle",
+    JSON.stringify({
       state: 0,
       contrast: false,
       dark: false,
       solution:
         fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)],
       values: [[], [], [], [], [], []],
-    };
+    })
+  );
+}
+
+if (!localStorage.getItem("wordle-stats")) {
+  localStorage.setItem(
+    "wordle-stats",
+    JSON.stringify({
+      played: 0,
+      win: 0,
+      currentStreak: 0,
+      maxStreak: 0,
+      winState: [],
+    })
+  );
+}
 
 const AppProvider = ({ children }) => {
+  // UPDATING LOCAL STORAGE
+  const updateLs = (wordle) => {
+    localStorage.setItem("wordle", JSON.stringify(wordle));
+  };
+
+  const updateStatsLs = (stats) => {
+    localStorage.setItem("wordle-stats", JSON.stringify(stats));
+  };
+
+  // GET LOCAL STORAGE
+  const getLs = () => {
+    return JSON.parse(localStorage.getItem("wordle"));
+  };
+
+  const getStatsLS = () => {
+    return JSON.parse(localStorage.getItem("wordle-stats"));
+  };
+
   // ***************
   // ***************
   //  STATES
   // ***************
   // ***************
 
-  const [solution] = useState(preValues.solution);
-  const [values, setValues] = useState(preValues.values);
-  const [state, setState] = useState(preValues.state);
+  const [solution] = useState(getLs().solution);
+  const [values, setValues] = useState(getLs().values);
+  const [state, setState] = useState(getLs().state);
   const [notif, setNotif] = useState("");
   const [tileCont, setTileCont] = useState();
   const [keyCont, setKeyCont] = useState();
@@ -45,8 +80,8 @@ const AppProvider = ({ children }) => {
 
   // For settings
   // const [hardMode, setHardMode] = useState(false);
-  const [darkMode, setDarkMode] = useState(preValues.dark);
-  const [contrastMode, setContrastMode] = useState(preValues.contrast);
+  const [darkMode, setDarkMode] = useState(getLs().dark);
+  const [contrastMode, setContrastMode] = useState(getLs().contrast);
 
   // CHECKING IF IT'S THE FIRST TIME AND SHOWING TUTORIAL
   if (!localStorage.getItem("wordle")) {
@@ -88,24 +123,13 @@ const AppProvider = ({ children }) => {
     [state, tileCont]
   );
 
-  // UPDATING LOCAL STORAGE
-  const updateLs = (wordle) => {
-    localStorage.setItem("wordle", JSON.stringify(wordle));
-  };
-
-  // GET LOCAL STORAGE
-  const getLs = () => {
-    return JSON.parse(localStorage.getItem("wordle"));
-  };
-
   // FOR NEW GAME BUTTON
   const handleStart = () => {
     const wordle = {
       ...getLs(),
       state: 0,
       solution:
-        // fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)],
-        "sweet",
+        fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)],
       values: [[], [], [], [], [], []],
     };
 
@@ -115,7 +139,7 @@ const AppProvider = ({ children }) => {
 
   // VALIDATE TILES AND KEYS VALUES
   const validateValue = useCallback(
-    (state) => {
+    (state, refresh = false) => {
       //  Validating for tiles
       const value = values[state];
       const word = values[state].join("");
@@ -144,7 +168,6 @@ const AppProvider = ({ children }) => {
         }
       };
 
-      // from line 140
       let checkFirst = true;
       function validateLetter(i) {
         // check if the letter appear twice and also in the solution twice
@@ -177,22 +200,6 @@ const AppProvider = ({ children }) => {
 
           return;
         }
-
-        // check if the letter appear twice but only appear once in the solution and not at the exact position
-        // if (
-        //   validator.contains(value.join(""), value[i], {
-        //     minOccurrences: 2,
-        //   }) &&
-        //   value[i] !== solution[i] &&
-        //   solution.includes(value[i])
-        // ) {
-        //   if (!checkFirst) {
-        //     tileRow[i]?.classList.add("absent");
-        //   }
-        //   tileRow[i]?.classList.add("present");
-        //   checkFirst = false;
-        //   return;
-        // }
       }
 
       // adding delay for the animation
@@ -242,6 +249,22 @@ const AppProvider = ({ children }) => {
 
         setTimeout(() => {
           showNotif(returnLevel(), false);
+
+          // update stats in local storage
+          if (refresh) return;
+          console.log(refresh);
+          const pre = getStatsLS();
+          const stats = {
+            played: pre.played + 1,
+            win: pre.win + 1,
+            currentStreak: pre.currentStreak + 1,
+            maxStreak:
+              pre.currentStreak === pre.maxStreak
+                ? pre.currentStreak + 1
+                : pre.maxStreak,
+            winState: [...pre.winState, state],
+          };
+          updateStatsLs(stats);
         }, 2000);
 
         setTimeout(() => {
@@ -265,6 +288,12 @@ const AppProvider = ({ children }) => {
 
         setTimeout(() => {
           showNotif("RETRO", false);
+
+          // update stats in local storage
+          if (refresh) return;
+          const pre = getStatsLS();
+          const stats = { ...pre, played: pre.played + 1, currentStreak: 0 };
+          updateStatsLs(stats);
         }, 200);
 
         setTimeout(() => {
@@ -347,7 +376,7 @@ const AppProvider = ({ children }) => {
 
     // updating the local storage
     const wordle = {
-      ...preValues,
+      ...getLs(),
       dark: darkMode,
     };
     updateLs(wordle);
@@ -363,7 +392,7 @@ const AppProvider = ({ children }) => {
 
     // updating the local storage
     const wordle = {
-      ...preValues,
+      ...getLs(),
       contrast: contrastMode,
     };
     updateLs(wordle);
@@ -381,17 +410,13 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     for (let i = 0; i < 6; i++) {
       if (tileCont) {
-        if (preValues.values[i].length > 1) {
-          validateValue(i);
+        if (getLs().values[i].length > 1) {
+          validateValue(i, true);
         }
       }
     }
     /* eslint-disable */
   }, [tileCont]);
-
-  // useEffect(() => {
-  //   console.log(values);
-  // }, [values]);
 
   return (
     <AppContext.Provider
